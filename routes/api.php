@@ -21,3 +21,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/contacts','App\Http\Controllers\ContactController@store');
 
+Route::get('/contacts','App\Http\Controllers\ContactController@index');
