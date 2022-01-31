@@ -4,6 +4,7 @@ import { BrowserRouter as Router , Routes , Route } from 'react-router-dom';
 import Nav from './Nav';
 import Contacts from './Contacts';
 import AddContact from './AddContact';
+import UpdateContact from './updateContact';
 
 function Example() {
     return (
@@ -13,6 +14,7 @@ function Example() {
         <Routes>
         <Route  path="/" exact element={<Contacts />} ></Route>
         <Route  path="/addContact" element={<AddContact />} ></Route>
+        <Route  path="/api/contacts/:id" element={<UpdateContact />} ></Route>
         </Routes>
         </>
         </Router>

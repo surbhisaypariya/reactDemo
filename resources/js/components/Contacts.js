@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import TableRow from './tableRow';
+import { Link } from "react-router-dom";
 
 class Contacts extends React.Component{
     
@@ -26,6 +26,12 @@ class Contacts extends React.Component{
                     <td>{object.fullname}</td>
                     <td>{object.email}</td>
                     <td>{object.phone}</td>
+                    <td>
+                    <Link to={"/api/contacts/"+object.id} className="btn btn-info">Edit</Link>
+                    
+                    <button className="btn btn-danger">Delete</button>
+                    
+                    </td>
                     </tr>)
                 })
             }
@@ -40,6 +46,7 @@ class Contacts extends React.Component{
                 <td>Name</td>
                 <td>Email</td>
                 <td>Phone</td>
+                <td>Action</td>
                 </tr>
                 </thead>
                 <tbody>
