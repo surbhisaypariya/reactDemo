@@ -7,7 +7,7 @@ import AddContact from './AddContact';
 
 function Example() {
     return (
-        <Router>
+        <Router >
         <Nav/>
         <>
         <Routes>
