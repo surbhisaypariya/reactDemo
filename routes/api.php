@@ -25,3 +25,4 @@ Route::get('/contacts','App\Http\Controllers\ContactController@index');
 Route::get('/edit/{id}','App\Http\Controllers\ContactController@edit');
 
 Route::put('contacts/{id}','App\Http\Controllers\ContactController@update');
+Route::delete('contacts/{id}','App\Http\Controllers\ContactController@destroy');

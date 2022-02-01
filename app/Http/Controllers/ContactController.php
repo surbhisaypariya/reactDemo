@@ -92,6 +92,7 @@ class ContactController extends Controller
     */
     public function destroy($id)
     {
-        //
+        $contacts = Contact::find($id)->delete();
+        return response()->json("Record Deleted Successfully");
     }
 }
