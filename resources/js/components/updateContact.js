@@ -1,9 +1,10 @@
 import React, { Component }from "react";
 import axios from "axios";
 
-class  AddContact extends React.Component{
+class  UpdateContact extends React.Component{
     constructor(props){
         super(props);
+        
         this.state = { fullname:'' , email:'' , phone:'' ,full_err:'' , email_err:'' , phone_err:'' , message:'' , br : <br/> }
         this.handleChange1 = this.handleChange1.bind(this);
         this.handleChange2 = this.handleChange2.bind(this);
@@ -11,9 +12,11 @@ class  AddContact extends React.Component{
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     componentDidMount(){
-        axios.get('http://127.0.0.1:8000/api/contacts/${this.props.params.id')
+        const location = window.location.href.split('/');
+        const id = location[4];
+        axios.get('/api/edit/'+id)
         .then(response => {
-            this.setState({ title: response.data.title, body: response.data.body });
+            this.setState({ fullname: response.data.fullname, email: response.data.email , phone : response.data.phone });
         })
         .catch(function (error) {
             console.log(error);
@@ -44,12 +47,10 @@ class  AddContact extends React.Component{
                 email : this.state.email,
                 phone : this.state.phone
             };
-            
-            axios.post('http://127.0.0.1:8000/api/contacts',contacts).then((response) => {
+            const location = window.location.href.split('/');
+            const id = location[4];
+            axios.put('http://127.0.0.1:8000/api/contacts/'+id,contacts).then((response) => {
             this.setState({ message : response.data });
-            this.setState({ fullname : "" });
-            this.setState({ email : "" });
-            this.setState({ phone : "" });
             window.history.pushState({},undefined,'/');
             window.location.reload();
         });
@@ -106,10 +107,32 @@ validate(){
 
 render(){
     return (
-        <div>
-        <h1>Hello</h1>
+        <div className="container">
+        <div className="text-danger" id="errors"><h3>{ this.state.message }</h3></div>
+        <div className="col-md-6 offset-3">
+        <div className="card-header"> Add Contact</div>
+        <div className="card-body">
+        <form onSubmit={this.handleSubmit}>
+        <div className="form-group">
+        <label>FullName</label>
+        <input className="form-control" name="fullname" onChange={this.handleChange1} value={this.state.fullname } type="text" id="fullname" />
+        </div>
+        <div className="form-group">
+        <label>Email</label>
+        <input className="form-control" name="email" onChange={this.handleChange2} value={this.state.email } type="text" id="email" />
+        </div>
+        <div className="form-group">
+        <label>Phone</label>
+        <input className="form-control" name="phone" onChange={this.handleChange3} value={this.state.phone } type="text" id="phone" />
+        </div>
+        <div style={{ padding:'10px' }}>
+        <input type="submit" className="btn btn-success" value="Update" />
+        </div>
+        </form>
+        </div>
+        </div>
         </div>
         )
     }
 }
-export default AddContact;
+export default UpdateContact;

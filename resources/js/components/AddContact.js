@@ -94,7 +94,6 @@ validate(){
     return isValid;
 }
 
-
 render(){
     return (
         <div className="container">

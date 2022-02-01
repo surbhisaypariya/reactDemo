@@ -14,7 +14,7 @@ function Example() {
         <Routes>
         <Route  path="/" exact element={<Contacts />} ></Route>
         <Route  path="/addContact" element={<AddContact />} ></Route>
-        <Route  path="/api/contacts/:id" element={<UpdateContact />} ></Route>
+        <Route  path="/edit/:id" element={<UpdateContact />} exact></Route>
         </Routes>
         </>
         </Router>

@@ -5605,6 +5605,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+
 var Contacts = /*#__PURE__*/function (_React$Component) {
   _inherits(Contacts, _React$Component);
 
@@ -5618,7 +5619,8 @@ var Contacts = /*#__PURE__*/function (_React$Component) {
     _this = _super.call(this, props);
     _this.state = {
       value: '',
-      contacts: ''
+      contacts: '',
+      message: ''
     };
     return _this;
   }
@@ -5650,7 +5652,7 @@ var Contacts = /*#__PURE__*/function (_React$Component) {
               children: object.phone
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("td", {
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Link, {
-                to: "/api/contacts/" + object.id,
+                to: "/edit/" + object.id,
                 className: "btn btn-info",
                 children: "Edit"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
@@ -5665,9 +5667,15 @@ var Contacts = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
         className: "col-md-6 offset-3",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("table", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+          className: "text-danger",
+          id: "errors",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("h3", {
+            children: this.state.message
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("table", {
           className: "table table-stripped",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("thead", {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("tr", {
@@ -5684,7 +5692,7 @@ var Contacts = /*#__PURE__*/function (_React$Component) {
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("tbody", {
             children: this.tabRow()
           })]
-        })
+        })]
       });
     }
   }]);
@@ -5739,8 +5747,9 @@ function Example() {
           path: "/addContact",
           element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_AddContact__WEBPACK_IMPORTED_MODULE_4__["default"], {})
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
-          path: "/api/contacts/:id",
-          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_updateContact__WEBPACK_IMPORTED_MODULE_5__["default"], {})
+          path: "/edit/:id",
+          element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_updateContact__WEBPACK_IMPORTED_MODULE_5__["default"], {}),
+          exact: true
         })]
       })
     })]
@@ -5860,15 +5869,16 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
-var AddContact = /*#__PURE__*/function (_React$Component) {
-  _inherits(AddContact, _React$Component);
 
-  var _super = _createSuper(AddContact);
+var UpdateContact = /*#__PURE__*/function (_React$Component) {
+  _inherits(UpdateContact, _React$Component);
 
-  function AddContact(props) {
+  var _super = _createSuper(UpdateContact);
+
+  function UpdateContact(props) {
     var _this;
 
-    _classCallCheck(this, AddContact);
+    _classCallCheck(this, UpdateContact);
 
     _this = _super.call(this, props);
     _this.state = {
@@ -5888,15 +5898,18 @@ var AddContact = /*#__PURE__*/function (_React$Component) {
     return _this;
   }
 
-  _createClass(AddContact, [{
+  _createClass(UpdateContact, [{
     key: "componentDidMount",
     value: function componentDidMount() {
       var _this2 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_1___default().get('http://127.0.0.1:8000/api/contacts/${this.props.params.id').then(function (response) {
+      var location = window.location.href.split('/');
+      var id = location[4];
+      axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/edit/' + id).then(function (response) {
         _this2.setState({
-          title: response.data.title,
-          body: response.data.body
+          fullname: response.data.fullname,
+          email: response.data.email,
+          phone: response.data.phone
         });
       })["catch"](function (error) {
         console.log(error);
@@ -5936,21 +5949,11 @@ var AddContact = /*#__PURE__*/function (_React$Component) {
           email: this.state.email,
           phone: this.state.phone
         };
-        axios__WEBPACK_IMPORTED_MODULE_1___default().post('http://127.0.0.1:8000/api/contacts', contacts).then(function (response) {
+        var location = window.location.href.split('/');
+        var id = location[4];
+        axios__WEBPACK_IMPORTED_MODULE_1___default().put('http://127.0.0.1:8000/api/contacts/' + id, contacts).then(function (response) {
           _this3.setState({
             message: response.data
-          });
-
-          _this3.setState({
-            fullname: ""
-          });
-
-          _this3.setState({
-            email: ""
-          });
-
-          _this3.setState({
-            phone: ""
           });
 
           window.history.pushState({}, undefined, '/');
@@ -6005,18 +6008,80 @@ var AddContact = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h1", {
-          children: "Hello"
-        })
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        className: "container",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+          className: "text-danger",
+          id: "errors",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h3", {
+            children: this.state.message
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          className: "col-md-6 offset-3",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+            className: "card-header",
+            children: " Add Contact"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+            className: "card-body",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("form", {
+              onSubmit: this.handleSubmit,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                className: "form-group",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+                  children: "FullName"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                  className: "form-control",
+                  name: "fullname",
+                  onChange: this.handleChange1,
+                  value: this.state.fullname,
+                  type: "text",
+                  id: "fullname"
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                className: "form-group",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+                  children: "Email"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                  className: "form-control",
+                  name: "email",
+                  onChange: this.handleChange2,
+                  value: this.state.email,
+                  type: "text",
+                  id: "email"
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                className: "form-group",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+                  children: "Phone"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                  className: "form-control",
+                  name: "phone",
+                  onChange: this.handleChange3,
+                  value: this.state.phone,
+                  type: "text",
+                  id: "phone"
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                style: {
+                  padding: '10px'
+                },
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                  type: "submit",
+                  className: "btn btn-success",
+                  value: "Update"
+                })
+              })]
+            })
+          })]
+        })]
       });
     }
   }]);
 
-  return AddContact;
+  return UpdateContact;
 }(react__WEBPACK_IMPORTED_MODULE_0__.Component);
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AddContact);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (UpdateContact);
 
 /***/ }),
 
