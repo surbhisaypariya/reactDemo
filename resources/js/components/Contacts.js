@@ -7,9 +7,8 @@ class Contacts extends React.Component{
     constructor(props){
         super(props);
         this.state = { value: '' , contacts : '' , message:''}
-        
     }
-    componentDidMount(){
+    getData(){
         axios.get('http://127.0.0.1:8000/api/contacts')
         .then(response => {
             this.setState({ contacts: response.data });
@@ -17,6 +16,9 @@ class Contacts extends React.Component{
         .catch(function (error) {
             console.log(error);
         }) 
+    }
+    componentDidMount(){
+        this.getData();
     }
     
     tabRow(){
@@ -32,10 +34,10 @@ class Contacts extends React.Component{
                         const confirm = window.confirm("Are You Sure?");
                         if(confirm === true){
                             axios.delete('http://127.0.0.1:8000/api/contacts/'+object.id).then((response) => {
+                            alert(response.data);
                             location.reload();
                         });
                     }
-                    
                 }}>Delete</button>
                 </td>
                 </tr>)

@@ -5628,8 +5628,8 @@ var Contacts = /*#__PURE__*/function (_React$Component) {
   }
 
   _createClass(Contacts, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
+    key: "getData",
+    value: function getData() {
       var _this2 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_0___default().get('http://127.0.0.1:8000/api/contacts').then(function (response) {
@@ -5639,6 +5639,11 @@ var Contacts = /*#__PURE__*/function (_React$Component) {
       })["catch"](function (error) {
         console.log(error);
       });
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.getData();
     }
   }, {
     key: "tabRow",
@@ -5664,6 +5669,7 @@ var Contacts = /*#__PURE__*/function (_React$Component) {
 
                   if (confirm === true) {
                     axios__WEBPACK_IMPORTED_MODULE_0___default()["delete"]('http://127.0.0.1:8000/api/contacts/' + object.id).then(function (response) {
+                      alert(response.data);
                       location.reload();
                     });
                   }
